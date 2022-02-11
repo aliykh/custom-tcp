@@ -2,8 +2,8 @@ package main
 
 import "log"
 
-const HOST string = "localhost"
-const PORT string = "8090"
+const defaultHOST string = "localhost"
+const defaultPORT string = "8090"
 
 func main() {
 

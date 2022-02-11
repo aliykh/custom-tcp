@@ -1,4 +1,4 @@
-module github.com/aliykh/custom-tcp-pool
+module github.com/aliykh/custom-tcp/pool
 
 go 1.17
 

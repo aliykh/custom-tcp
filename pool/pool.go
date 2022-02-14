@@ -40,25 +40,25 @@ type connRequest struct {
 
 type Option func(t *TcpConnPool)
 
-func SetHost(host string) Option {
+func WithHost(host string) Option {
 	return func(t *TcpConnPool) {
 		t.host = host
 	}
 }
 
-func SetPort(port string) Option {
+func WithPort(port string) Option {
 	return func(t *TcpConnPool) {
 		t.port = port
 	}
 }
 
-func SetMaxIdleConn(size int) Option {
+func WithMaxIdleConn(size int) Option {
 	return func(t *TcpConnPool) {
 		t.maxIdleConn = size
 	}
 }
 
-func SetMaxOpenConn(size int) Option {
+func WithMaxOpenConn(size int) Option {
 	return func(t *TcpConnPool) {
 		t.maxOpenConn = size
 	}

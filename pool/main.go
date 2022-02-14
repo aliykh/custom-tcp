@@ -1,6 +1,11 @@
 package main
 
-import "log"
+import (
+	"fmt"
+	"log"
+	"sync"
+	"time"
+)
 
 const defaultHOST string = "localhost"
 const defaultPORT string = "8090"
@@ -11,22 +16,36 @@ func main() {
 
 	tcpPool := CreateTCPConnPool()
 
-	messages := []string{"hello", "world"}
+	wg := sync.WaitGroup{}
 
-	for _, v := range messages {
+	wg.Add(5)
 
-		conn, err := tcpPool.get()
-		if err != nil {
-			log.Fatalln(err.Error())
-		}
+	for i := 0; i < 5; i++ {
 
-		_, err = conn.Write([]byte(v))
+		go func(j int) {
+			defer wg.Done()
 
-		if err != nil {
-			log.Fatalln(err)
-		}
+			if j >= 3 {
+				time.Sleep(time.Second * 1)
+			}
 
-		tcpPool.put(conn)
+			conn, err := tcpPool.get()
+			if err != nil {
+				log.Fatalln(err.Error())
+			}
+
+			v := fmt.Sprintf("hello from connection with id %s and message %v", conn.id, j)
+
+			_, err = conn.Write([]byte(v))
+
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			tcpPool.put(conn)
+		}(i)
 	}
+
+	wg.Wait()
 
 }

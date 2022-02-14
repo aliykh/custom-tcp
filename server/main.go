@@ -84,14 +84,20 @@ func handle(conn net.Conn) {
 
 	defer conn.Close()
 
-	data, err := Read(conn)
+	for {
 
-	if err != nil {
-		fmt.Printf("error occured while reading the data %s\n", err.Error())
-		return
+		data, err := Read(conn)
+
+		if err != nil {
+			if err != io.EOF {
+				fmt.Printf("error occured while reading the data %s\n", err.Error())
+			}
+			return
+		}
+
+		fmt.Println(string(data))
 	}
 
-	fmt.Println(string(data))
 }
 
 // Read - reads data from the connection

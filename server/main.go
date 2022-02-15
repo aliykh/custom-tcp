@@ -82,21 +82,28 @@ func createNewTCPServer(ctx context.Context) {
 
 func handle(conn net.Conn) {
 
-	defer conn.Close()
-
-	for {
-
-		data, err := Read(conn)
-
+	defer func(conn net.Conn) {
+		err := conn.Close()
 		if err != nil {
-			if err != io.EOF {
-				fmt.Printf("error occured while reading the data %s\n", err.Error())
-			}
-			return
+			fmt.Printf("error while closing the connection %v", err.Error())
 		}
 
-		fmt.Println(string(data))
+		fmt.Println("connection is closed")
+	}(conn)
+
+	//for {
+
+	data, err := Read(conn)
+
+	if err != nil {
+		if err != io.EOF {
+			fmt.Printf("error occured while reading the data %s\n", err.Error())
+		}
+		return
 	}
+
+	fmt.Println(string(data))
+	//}
 
 }
 

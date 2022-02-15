@@ -23,6 +23,7 @@ func main() {
 	for i := 0; i < 5; i++ {
 
 		go func(j int) {
+
 			defer wg.Done()
 
 			if j >= 3 {
@@ -39,7 +40,9 @@ func main() {
 			_, err = conn.Write([]byte(v))
 
 			if err != nil {
-				log.Fatalln(err)
+				fmt.Println("write error")
+				// close faulty connections
+				conn.conn.Close()
 			}
 
 			tcpPool.put(conn)
